@@ -11,8 +11,9 @@ pipeline {
                 sh "git clone ${REPO_URL}"
             }
         }
-        stage('Build docker image') {
+        stage('Delete previous image if exists and build docker image') {
             steps {
+                sh 'docker rmi summary-ex-flask-app'
                 sh 'docker build -t summary-ex-flask-app ./summaryEx'
             }
         }
