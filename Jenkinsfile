@@ -13,8 +13,13 @@ pipeline {
         }
         stage('Delete previous image if exists and build docker image') {
             steps {
-                sh 'docker rmi summary-ex-flask-app'
-                sh 'docker build -t summary-ex-flask-app ./summaryEx'
+                script {
+                    def imageExists = sh(script: 'docker images -q summary-ex-flask-app', returnStdout: true).trim()
+                    if (imageExists) {
+                        sh 'docker rmi summary-ex-flask-app'
+                    }
+                }
+        sh 'docker build -t summary-ex-flask-app ./summaryEx'
             }
         }
 
